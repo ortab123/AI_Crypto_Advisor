@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String           @id @default(cuid())
+  email       String           @unique
+  name        String
+  password    String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  preferences UserPreferences?
+  feedback    Feedback[]
+
+  @@map("users")
+}
+
+model UserPreferences {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favoriteAssets  String[]
+  customAsset     String?
+  investorType    String
+  experienceLevel String
+  riskTolerance   String
+  investmentGoal  String
+  preferredContent String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("user_preferences")
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentType String
+  contentId   String
+  value       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, contentType, contentId])
+  @@map("feedback")
+}
