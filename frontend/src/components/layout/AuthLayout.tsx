@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -19,7 +19,9 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8 shadow-2xl">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-white">{title}</h2>
-            {subtitle && <p className="text-gray-400 text-sm mt-1">{subtitle}</p>}
+            {subtitle && (
+              <p className="text-gray-400 text-sm mt-1">{subtitle}</p>
+            )}
           </div>
           {children}
         </div>

@@ -1,13 +1,16 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Input } from '../common/Input';
-import { Button } from '../common/Button';
-import { FormError } from '../common/FormError';
-import { LoginFormData } from '../../types/auth.types';
-import { useLogin } from '../../hooks/useLogin';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Input } from "../common/Input";
+import { Button } from "../common/Button";
+import { FormError } from "../common/FormError";
+import { LoginFormData } from "../../types/auth.types";
+import { useLogin } from "../../hooks/useLogin";
 
 export function LoginForm() {
-  const [formData, setFormData] = useState<LoginFormData>({ email: '', password: '' });
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
   const { isLoading, fieldErrors, apiError, handleLogin } = useLogin();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -46,8 +49,11 @@ export function LoginForm() {
         Sign In
       </Button>
       <p className="text-center text-sm text-gray-400">
-        Don&apos;t have an account?{' '}
-        <Link to="/register" className="text-amber-400 hover:text-amber-300 font-medium">
+        Don&apos;t have an account?{" "}
+        <Link
+          to="/register"
+          className="text-amber-400 hover:text-amber-300 font-medium"
+        >
           Sign up
         </Link>
       </p>
