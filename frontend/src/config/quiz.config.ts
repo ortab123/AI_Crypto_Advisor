@@ -65,4 +65,18 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "High-Risk High-Reward Opportunities",
     ],
   },
+  {
+    key: "preferredContent" as const,
+    label: "Preferred Content",
+    question: "What kind of content would you like to see?",
+    type: "multi" as const,
+    options: [
+      "Market News",
+      "Price Charts & Analysis",
+      "AI Insights",
+      "Social Trends & Sentiment",
+      "Educational Content",
+      "Crypto Memes & Fun Content",
+    ],
+  },
 ];

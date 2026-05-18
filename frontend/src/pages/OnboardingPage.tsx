@@ -45,7 +45,9 @@ export function OnboardingPage() {
         {currentQuestion.type === "multi" ? (
           <MultiChoiceQuestion
             options={currentQuestion.options}
-            selected={answers.favoriteAssets}
+            selected={
+              answers[currentQuestion.key as keyof QuizAnswers] as string[]
+            }
             customAsset={answers.customAsset}
             onToggle={handleMultiToggle}
             onCustomAsset={handleCustomAsset}

@@ -16,11 +16,12 @@ export function Button({
   ...props
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-slate-dark disabled:opacity-40 disabled:cursor-not-allowed";
   const variants = {
     primary:
-      "bg-amber-500 hover:bg-amber-400 text-gray-900 focus:ring-amber-500",
-    secondary: "bg-gray-700 hover:bg-gray-600 text-white focus:ring-gray-500",
+      "bg-brand-red hover:bg-brand-red-dark text-white focus:ring-brand-red",
+    secondary:
+      "bg-brand-slate hover:bg-brand-slate-light text-white border border-brand-border focus:ring-brand-border",
   };
 
   return (

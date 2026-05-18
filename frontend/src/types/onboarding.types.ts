@@ -5,6 +5,7 @@ export interface QuizAnswers {
   experienceLevel: string;
   riskTolerance: string;
   investmentGoal: string;
+  preferredContent: string[];
 }
 
 export interface UserPreferences {
@@ -16,6 +17,7 @@ export interface UserPreferences {
   experienceLevel: string;
   riskTolerance: string;
   investmentGoal: string;
+  preferredContent: string[];
   createdAt: string;
   updatedAt: string;
 }

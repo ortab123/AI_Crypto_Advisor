@@ -52,7 +52,7 @@ export function LoginForm() {
         Don&apos;t have an account?{" "}
         <Link
           to="/register"
-          className="text-amber-400 hover:text-amber-300 font-medium"
+          className="text-brand-red-light hover:text-white font-medium transition-colors"
         >
           Sign up
         </Link>

@@ -34,15 +34,15 @@ export function QuizStep({
     <div className="flex flex-col gap-6">
       {/* Progress bar */}
       <div>
-        <div className="flex justify-between text-xs text-gray-500 mb-2">
+        <div className="flex justify-between text-xs text-brand-muted mb-2">
           <span>
             Step {step + 1} of {totalSteps}
           </span>
           <span>{Math.round(progress)}%</span>
         </div>
-        <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-brand-slate-deep rounded-full overflow-hidden">
           <div
-            className="h-full bg-amber-500 rounded-full transition-all duration-500"
+            className="h-full bg-brand-red rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -50,7 +50,7 @@ export function QuizStep({
 
       {/* Question */}
       <div>
-        <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">
+        <p className="text-xs font-semibold text-brand-red-light uppercase tracking-wider mb-1">
           {label}
         </p>
         <h3 className="text-lg font-bold text-white">{question}</h3>

@@ -13,6 +13,7 @@ const INITIAL_ANSWERS: QuizAnswers = {
   experienceLevel: "",
   riskTolerance: "",
   investmentGoal: "",
+  preferredContent: [],
 };
 
 export function useOnboarding() {
@@ -27,23 +28,28 @@ export function useOnboarding() {
   const isLastStep = step === QUIZ_QUESTIONS.length - 1;
 
   function isCurrentStepValid(): boolean {
-    if (currentQuestion.key === "favoriteAssets") {
-      return answers.favoriteAssets.length > 0;
+    if (currentQuestion.type === "multi") {
+      const value = answers[currentQuestion.key as keyof QuizAnswers];
+      return Array.isArray(value) && value.length > 0;
     }
     const value = answers[currentQuestion.key as keyof QuizAnswers];
     return typeof value === "string" && value.length > 0;
   }
 
   function handleMultiToggle(option: string): void {
+    const key = currentQuestion.key as "favoriteAssets" | "preferredContent";
     setAnswers((prev) => {
-      const assets = prev.favoriteAssets.includes(option)
-        ? prev.favoriteAssets.filter((a) => a !== option)
-        : [...prev.favoriteAssets, option];
+      const current = prev[key] as string[];
+      const updated = current.includes(option)
+        ? current.filter((a) => a !== option)
+        : [...current, option];
       const customAsset =
-        option === "Other..." && prev.favoriteAssets.includes(option)
+        key === "favoriteAssets" &&
+        option === "Other..." &&
+        current.includes(option)
           ? ""
           : prev.customAsset;
-      return { ...prev, favoriteAssets: assets, customAsset };
+      return { ...prev, [key]: updated, customAsset };
     });
   }
 

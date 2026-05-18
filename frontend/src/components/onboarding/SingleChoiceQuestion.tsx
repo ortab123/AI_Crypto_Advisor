@@ -20,7 +20,7 @@ export function SingleChoiceQuestion({
             type="radio"
             checked={selected === option}
             onChange={() => onSelect(option)}
-            className="w-4 h-4 accent-amber-500 cursor-pointer"
+            className="w-4 h-4 accent-brand-red cursor-pointer"
           />
           <span className="text-gray-200 group-hover:text-white transition-colors">
             {option}

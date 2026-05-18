@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #2e3a50;
+    color: #ffffff;
+  }
+
+  /* Force all inputs to use brand colors — overrides browser defaults */
+  input {
+    background-color: #414e68 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+  }
+
+  /* Fix browser autofill yellow/white background override */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #414e68 inset !important;
+    caret-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}

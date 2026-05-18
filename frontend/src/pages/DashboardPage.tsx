@@ -5,14 +5,16 @@ export function DashboardPage() {
   const { user, logout } = useAuthContext();
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <header className="border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-brand-slate-dark text-white">
+      <header className="border-b border-brand-border px-6 py-4 flex items-center justify-between bg-brand-slate">
         <div className="flex items-center gap-2">
           <span className="text-xl">₿</span>
           <span className="font-bold">AI Crypto Advisor</span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-400">Welcome, {user?.name}</span>
+          <span className="text-sm text-brand-muted">
+            Welcome, {user?.name}
+          </span>
           <Button variant="secondary" onClick={logout}>
             Sign Out
           </Button>
@@ -20,7 +22,7 @@ export function DashboardPage() {
       </header>
       <main className="container mx-auto px-6 py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Your Dashboard</h2>
-        <p className="text-gray-400">
+        <p className="text-brand-muted">
           Coming soon — AI-curated crypto content tailored just for you.
         </p>
       </main>

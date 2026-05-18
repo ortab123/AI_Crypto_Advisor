@@ -17,6 +17,9 @@ const onboardingRules = [
     .withMessage("Experience level is required"),
   body("riskTolerance").notEmpty().withMessage("Risk tolerance is required"),
   body("investmentGoal").notEmpty().withMessage("Investment goal is required"),
+  body("preferredContent")
+    .isArray({ min: 1 })
+    .withMessage("Select at least one content type"),
 ];
 
 const router = Router();

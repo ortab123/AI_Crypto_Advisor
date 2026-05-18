@@ -5,6 +5,7 @@ export interface OnboardingData {
   experienceLevel: string;
   riskTolerance: string;
   investmentGoal: string;
+  preferredContent: string[];
 }
 
 export interface UserPreferences extends OnboardingData {
