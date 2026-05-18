@@ -1,7 +1,13 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import rateLimit from "express-rate-limit";
-import { registerHandler, loginHandler } from "../controllers/auth.controller";
+import {
+  registerHandler,
+  loginHandler,
+  updateNameHandler,
+  updatePasswordHandler,
+} from "../controllers/auth.controller";
+import { authMiddleware } from "../middleware/auth.middleware";
 import { validate } from "../middleware/validation.middleware";
 
 const limiter = rateLimit({
@@ -38,5 +44,16 @@ const router = Router();
 
 router.post("/register", limiter, registerRules, validate, registerHandler);
 router.post("/login", limiter, loginRules, validate, loginHandler);
+router.patch(
+  "/me",
+  authMiddleware,
+  body("name")
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage("Name must be 2–50 characters"),
+  validate,
+  updateNameHandler,
+);
+router.patch("/me/password", authMiddleware, validate, updatePasswordHandler);
 
 export default router;

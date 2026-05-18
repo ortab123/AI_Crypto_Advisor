@@ -5,6 +5,8 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 function PrivateRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoading, hasCompletedOnboarding } =
@@ -21,6 +23,13 @@ function OnboardingRoute({ children }: { children: ReactNode }) {
   if (isLoading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (hasCompletedOnboarding) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
+
+function LoggedInRoute({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuthContext();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }
 
@@ -73,6 +82,22 @@ export default function App() {
           <PrivateRoute>
             <DashboardPage />
           </PrivateRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <LoggedInRoute>
+            <ProfilePage />
+          </LoggedInRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <LoggedInRoute>
+            <SettingsPage />
+          </LoggedInRoute>
         }
       />
     </Routes>

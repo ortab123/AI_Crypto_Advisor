@@ -14,4 +14,6 @@ export const env = {
   JWT_SECRET: requireEnv("JWT_SECRET"),
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || "7d",
   FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:5173",
+  // External APIs (optional — features degrade gracefully when missing)
+  GROQ_API_KEY: process.env.GROQ_API_KEY || "",
 };
