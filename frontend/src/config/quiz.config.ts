@@ -75,7 +75,6 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Price Charts & Analysis",
       "AI Insights",
       "Social Trends & Sentiment",
-      "Educational Content",
       "Crypto Memes & Fun Content",
     ],
   },

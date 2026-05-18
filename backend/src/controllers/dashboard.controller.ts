@@ -6,6 +6,7 @@ import { getNews } from "../services/cryptopanic.service";
 import { generateInsight } from "../services/ai.service";
 import { getMeme } from "../services/meme.service";
 import { getFeedbackMap } from "../services/feedback.service";
+import { getTrends } from "../services/trends.service";
 import { sendSuccess, sendError } from "../utils/response.utils";
 
 export async function getDashboard(
@@ -20,6 +21,10 @@ export async function getDashboard(
       return;
     }
 
+    const wantsTrends =
+      preferences.preferredContent.length === 0 ||
+      preferences.preferredContent.includes("Social Trends & Sentiment");
+
     // Fetch all external sources + user feedback in parallel
     const [
       pricesResult,
@@ -27,6 +32,7 @@ export async function getDashboard(
       insightResult,
       memeResult,
       feedbackResult,
+      trendsResult,
     ] = await Promise.allSettled([
       getCoinPrices(preferences.favoriteAssets),
       getNews(preferences.favoriteAssets),
@@ -37,6 +43,7 @@ export async function getDashboard(
       ),
       getMeme(),
       getFeedbackMap(req.user!.userId),
+      wantsTrends ? getTrends() : Promise.resolve(null),
     ]);
 
     const insight =
@@ -72,6 +79,8 @@ export async function getDashboard(
       meme: memeResult.status === "fulfilled" ? memeResult.value : null,
       userFeedback:
         feedbackResult.status === "fulfilled" ? feedbackResult.value : {},
+      trends:
+        trendsResult.status === "fulfilled" ? trendsResult.value : null,
     });
   } catch (err) {
     next(err);
