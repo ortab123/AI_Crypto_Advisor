@@ -16,6 +16,7 @@ export interface AuthResponse {
     email: string;
     name: string;
   };
+  hasCompletedOnboarding: boolean;
 }
 
 export interface JwtPayload {

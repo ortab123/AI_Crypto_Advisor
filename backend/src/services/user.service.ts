@@ -1,6 +1,6 @@
-import prisma from '../db/prisma.client';
-import { hashPassword } from '../utils/password.utils';
-import { UserPublic } from '../types/user.types';
+import prisma from "../db/prisma.client";
+import { hashPassword } from "../utils/password.utils";
+import { UserPublic } from "../types/user.types";
 
 export async function createUser(data: {
   email: string;
