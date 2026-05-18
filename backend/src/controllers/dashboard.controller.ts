@@ -79,8 +79,7 @@ export async function getDashboard(
       meme: memeResult.status === "fulfilled" ? memeResult.value : null,
       userFeedback:
         feedbackResult.status === "fulfilled" ? feedbackResult.value : {},
-      trends:
-        trendsResult.status === "fulfilled" ? trendsResult.value : null,
+      trends: trendsResult.status === "fulfilled" ? trendsResult.value : null,
     });
   } catch (err) {
     next(err);

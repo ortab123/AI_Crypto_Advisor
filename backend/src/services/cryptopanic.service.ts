@@ -56,13 +56,16 @@ function extractImage(item: string): string | null {
   // 2. <enclosure url="..." type="image/...">
   const enc = item.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i);
   if (enc) return enc[1];
-  const enc2 = item.match(/<enclosure[^>]+url="([^"]+)"[^>]+type="image[^"]*"/i);
+  const enc2 = item.match(
+    /<enclosure[^>]+url="([^"]+)"[^>]+type="image[^"]*"/i,
+  );
   if (enc2) return enc2[1];
   // 3. <media:thumbnail url="...">
   img = extractAttr(item, "media:thumbnail", "url");
   if (img) return img;
   // 4. First <img src="..."> in description
-  const descBlock = item.match(/<description>([\s\S]*?)<\/description>/i)?.[1] ?? "";
+  const descBlock =
+    item.match(/<description>([\s\S]*?)<\/description>/i)?.[1] ?? "";
   const imgMatch = descBlock.match(/<img[^>]+src=["']([^"']+)["']/i);
   if (imgMatch) return imgMatch[1];
   return null;
@@ -76,7 +79,9 @@ function extractLink(item: string): string {
   const plain = item.match(/<link>(https?[^<]+)<\/link>/i);
   if (plain) return plain[1].trim();
   // <guid isPermaLink="true">
-  const guid = item.match(/<guid[^>]*isPermaLink="true"[^>]*>(https?[^<]+)<\/guid>/i);
+  const guid = item.match(
+    /<guid[^>]*isPermaLink="true"[^>]*>(https?[^<]+)<\/guid>/i,
+  );
   if (guid) return guid[1].trim();
   return "";
 }
@@ -164,7 +169,9 @@ export async function getNews(
         axios
           .get<string>(url, {
             timeout: 8000,
-            headers: { Accept: "application/rss+xml, application/xml, text/xml" },
+            headers: {
+              Accept: "application/rss+xml, application/xml, text/xml",
+            },
           })
           .then((r) => parseRss(r.data, source)),
       ),

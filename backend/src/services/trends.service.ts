@@ -25,7 +25,7 @@ export interface RedditPost {
 }
 
 export interface FearGreed {
-  value: number;   // 0–100
+  value: number; // 0–100
   classification: string; // "Extreme Fear" | "Fear" | "Neutral" | "Greed" | "Extreme Greed"
 }
 
@@ -134,8 +134,7 @@ export async function getTrends(): Promise<TrendsData> {
     ]);
 
   return {
-    trending:
-      trendingResult.status === "fulfilled" ? trendingResult.value : [],
+    trending: trendingResult.status === "fulfilled" ? trendingResult.value : [],
     reddit: redditResult.status === "fulfilled" ? redditResult.value : [],
     fearGreed:
       fearGreedResult.status === "fulfilled" ? fearGreedResult.value : null,
