@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: ai-crypto-advisor-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run migrate:deploy && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-crypto-advisor-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # Set to your deployed Vercel URL after first frontend deploy, e.g. https://your-app.vercel.app
+      - key: FRONTEND_URL
+        sync: false
+      # Get a free key at https://console.groq.com
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_API_URL
+        value: https://api.groq.com/openai/v1/chat/completions
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: COINGECKO_BASE_URL
+        value: https://api.coingecko.com/api/v3
+
+databases:
+  - name: ai-crypto-advisor-db
+    databaseName: ai_crypto_advisor
+    plan: free

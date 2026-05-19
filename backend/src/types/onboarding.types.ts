@@ -1,6 +1,6 @@
 export interface OnboardingData {
   favoriteAssets: string[];
-  customAsset?: string;
+  customAsset?: string | null;
   investorType: string;
   experienceLevel: string;
   riskTolerance: string;
