@@ -63,10 +63,22 @@ async function searchCoin(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await axios.get<any>(`${BASE}/search`, {
       params: { query },
+      headers: env.COINGECKO_API_KEY
+        ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY }
+        : {},
       timeout: 5000,
     });
-    const hit = data?.coins?.[0];
-    if (!hit) return null;
+    const coins: any[] = data?.coins ?? [];
+    if (coins.length === 0) return null;
+
+    // Prefer an exact symbol match (case-insensitive) over the first result.
+    // This avoids picking the wrong token when multiple coins share a ticker (e.g. MORPHO, KCS).
+    const upperQuery = query.toUpperCase();
+    const hit =
+      coins.find(
+        (c: any) => (c.symbol as string).toUpperCase() === upperQuery,
+      ) ?? coins[0];
+
     const result = {
       id: hit.id as string,
       symbol: (hit.symbol as string).toUpperCase(),
@@ -116,7 +128,9 @@ export async function getCoinPrices(assets: string[]): Promise<CoinPrice[]> {
         price_change_percentage: "24h",
         sparkline: true,
       },
-      headers: env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY } : {},
+      headers: env.COINGECKO_API_KEY
+        ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY }
+        : {},
       timeout: 10000,
     });
 
@@ -145,7 +159,9 @@ export async function getCoinPrices(assets: string[]): Promise<CoinPrice[]> {
     try {
       const { data } = await axios.get(`${BASE}/simple/price`, {
         params: { ids, vs_currencies: "usd", include_24hr_change: true },
-        headers: env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY } : {},
+        headers: env.COINGECKO_API_KEY
+          ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY }
+          : {},
         timeout: 8000,
       });
       const result = coins.map((coin) => ({

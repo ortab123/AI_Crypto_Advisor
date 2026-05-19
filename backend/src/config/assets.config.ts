@@ -51,4 +51,9 @@ export const ASSET_MAP: Record<
   Arbitrum: { id: "arbitrum", symbol: "ARB", name: "Arbitrum" },
   OP: { id: "optimism", symbol: "OP", name: "Optimism" },
   Optimism: { id: "optimism", symbol: "OP", name: "Optimism" },
+  XMR: { id: "monero", symbol: "XMR", name: "Monero" },
+  Monero: { id: "monero", symbol: "XMR", name: "Monero" },
+  MORPHO: { id: "morpho", symbol: "MORPHO", name: "Morpho" },
+  KCS: { id: "kucoin-shares", symbol: "KCS", name: "KuCoin Token" },
+  "KuCoin Token": { id: "kucoin-shares", symbol: "KCS", name: "KuCoin Token" },
 };
