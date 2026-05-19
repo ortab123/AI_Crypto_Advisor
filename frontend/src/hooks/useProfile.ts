@@ -8,7 +8,11 @@ import {
 } from "../services/onboarding.service";
 import { QuizAnswers } from "../types/onboarding.types";
 import { QUIZ_QUESTIONS } from "../config/quiz.config";
-import { EMPTY_ANSWERS, buildFinalAnswers, isStepValid } from "../utils/onboarding.utils";
+import {
+  EMPTY_ANSWERS,
+  buildFinalAnswers,
+  isStepValid,
+} from "../utils/onboarding.utils";
 
 export function useProfile() {
   const [step, setStep] = useState(0);

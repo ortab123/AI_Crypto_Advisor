@@ -45,7 +45,9 @@ export function TrendsSection({
                 ))}
               </div>
             ) : (
-              <p className="text-brand-muted text-xs">No Reddit data available</p>
+              <p className="text-brand-muted text-xs">
+                No Reddit data available
+              </p>
             )}
             <p className="text-sm text-brand-muted mt-2">top posts today</p>
           </div>

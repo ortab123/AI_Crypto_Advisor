@@ -22,7 +22,9 @@ export function DashboardNavbar({
         <span className="font-bold tracking-wide">AI Crypto Advisor</span>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-brand-muted hidden sm:block">{email}</span>
+        <span className="text-sm text-brand-muted hidden sm:block">
+          {email}
+        </span>
         <button
           onClick={onProfile}
           className="p-2 rounded-lg hover:bg-brand-slate-light text-brand-muted hover:text-white transition-colors"
