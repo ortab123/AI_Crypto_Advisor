@@ -5,50 +5,11 @@ import { useAuthContext } from "../context/AuthContext";
 import { submitOnboardingApi } from "../services/onboarding.service";
 import { QuizAnswers } from "../types/onboarding.types";
 import { QUIZ_QUESTIONS } from "../config/quiz.config";
-
-const INITIAL_ANSWERS: QuizAnswers = {
-  favoriteAssets: [],
-  customAsset: "",
-  investorType: "",
-  experienceLevel: "",
-  riskTolerance: "",
-  investmentGoal: "",
-  preferredContent: [],
-};
-
-/** Merge comma-separated customAsset entries into favoriteAssets before submitting. */
-function buildFinalAnswers(answers: QuizAnswers): QuizAnswers {
-  const hasOther = answers.favoriteAssets.includes("Other...");
-  const customCoins = hasOther
-    ? answers.customAsset
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .slice(0, 3)
-    : [];
-  // Merge preset choices (excluding "Other...") with typed custom coins, dedup case-insensitively
-  const seen = new Set<string>();
-  const merged: string[] = [];
-  for (const coin of [
-    ...answers.favoriteAssets.filter((a) => a !== "Other..."),
-    ...customCoins,
-  ]) {
-    const key = coin.toLowerCase();
-    if (!seen.has(key)) {
-      seen.add(key);
-      merged.push(coin);
-    }
-  }
-  return {
-    ...answers,
-    favoriteAssets: merged,
-    customAsset: hasOther ? answers.customAsset : "",
-  };
-}
+import { EMPTY_ANSWERS, buildFinalAnswers, isStepValid } from "../utils/onboarding.utils";
 
 export function useOnboarding() {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
+  const [answers, setAnswers] = useState<QuizAnswers>(EMPTY_ANSWERS);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const { setOnboardingComplete } = useAuthContext();
@@ -58,20 +19,7 @@ export function useOnboarding() {
   const isLastStep = step === QUIZ_QUESTIONS.length - 1;
 
   function isCurrentStepValid(): boolean {
-    if (currentQuestion.type === "multi") {
-      const value = answers[currentQuestion.key as keyof QuizAnswers];
-      if (!Array.isArray(value) || value.length === 0) return false;
-      if (currentQuestion.key === "favoriteAssets") {
-        const hasRealCoin = (value as string[]).some((v) => v !== "Other...");
-        const hasCustom =
-          (value as string[]).includes("Other...") &&
-          answers.customAsset.trim().length > 0;
-        return hasRealCoin || hasCustom;
-      }
-      return true;
-    }
-    const value = answers[currentQuestion.key as keyof QuizAnswers];
-    return typeof value === "string" && value.length > 0;
+    return isStepValid(currentQuestion.key, currentQuestion.type, answers);
   }
 
   function handleMultiToggle(option: string): void {

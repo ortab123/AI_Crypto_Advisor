@@ -18,9 +18,9 @@ export async function generateInsight(
   const prompt = `You are a sharp crypto market analyst. In exactly 2-3 sentences, give a concise market insight for a ${investorType} investor with ${riskTolerance} risk tolerance who holds ${assets || "major crypto assets"}. Focus on current conditions and one clear takeaway. Be direct and professional.`;
 
   const { data } = await axios.post(
-    "https://api.groq.com/openai/v1/chat/completions",
+    env.GROQ_API_URL,
     {
-      model: "llama-3.1-8b-instant",
+      model: env.GROQ_MODEL,
       messages: [{ role: "user", content: prompt }],
       max_tokens: 180,
       temperature: 0.7,

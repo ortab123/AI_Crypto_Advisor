@@ -3,7 +3,15 @@ import { CoinPrice } from "../../types/dashboard.types";
 import { Sparkline } from "./Sparkline";
 import { formatPrice } from "./utils";
 
-export function CoinRow({ coin }: { coin: CoinPrice }) {
+export function CoinRow({
+  coin,
+  feedback,
+  onFeedback,
+}: {
+  coin: CoinPrice;
+  feedback?: string;
+  onFeedback?: (value: string) => void;
+}) {
   const [expanded, setExpanded] = useState(false);
   const up = coin.change24h >= 0;
   const unavailable = coin.priceUnavailable === true;
@@ -85,14 +93,39 @@ export function CoinRow({ coin }: { coin: CoinPrice }) {
               </div>
             )}
           </div>
-          <a
-            href={`https://www.coingecko.com/en/coins/${coin.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-center text-brand-red-light hover:underline pt-1"
-          >
-            View full details on CoinGecko →
-          </a>
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-brand-muted mr-1">Rate:</span>
+              <button
+                onClick={() => onFeedback?.("like")}
+                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg border transition-colors ${
+                  feedback === "like"
+                    ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
+                    : "border-brand-border/60 text-brand-muted hover:text-emerald-400 hover:border-emerald-500/40"
+                }`}
+              >
+                👍 {feedback === "like" ? "Liked" : "Like"}
+              </button>
+              <button
+                onClick={() => onFeedback?.("dislike")}
+                className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg border transition-colors ${
+                  feedback === "dislike"
+                    ? "bg-red-500/20 border-red-500/50 text-red-400"
+                    : "border-brand-border/60 text-brand-muted hover:text-red-400 hover:border-red-500/40"
+                }`}
+              >
+                👎 {feedback === "dislike" ? "Disliked" : "Dislike"}
+              </button>
+            </div>
+            <a
+              href={`https://www.coingecko.com/en/coins/${coin.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-brand-red-light hover:underline"
+            >
+              CoinGecko →
+            </a>
+          </div>
         </div>
       )}
     </div>

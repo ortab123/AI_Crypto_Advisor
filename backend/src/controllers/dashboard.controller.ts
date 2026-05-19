@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import { getPreferences } from "../services/onboarding.service";
 import { getCoinPrices } from "../services/coingecko.service";
-import { getNews } from "../services/cryptopanic.service";
+import { getNews } from "../services/news.service";
 import { generateInsight } from "../services/ai.service";
 import { getMeme } from "../services/meme.service";
 import { getFeedbackMap } from "../services/feedback.service";
