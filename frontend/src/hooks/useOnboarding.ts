@@ -16,6 +16,36 @@ const INITIAL_ANSWERS: QuizAnswers = {
   preferredContent: [],
 };
 
+/** Merge comma-separated customAsset entries into favoriteAssets before submitting. */
+function buildFinalAnswers(answers: QuizAnswers): QuizAnswers {
+  const hasOther = answers.favoriteAssets.includes("Other...");
+  const customCoins = hasOther
+    ? answers.customAsset
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+    : [];
+  // Merge preset choices (excluding "Other...") with typed custom coins, dedup case-insensitively
+  const seen = new Set<string>();
+  const merged: string[] = [];
+  for (const coin of [
+    ...answers.favoriteAssets.filter((a) => a !== "Other..."),
+    ...customCoins,
+  ]) {
+    const key = coin.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      merged.push(coin);
+    }
+  }
+  return {
+    ...answers,
+    favoriteAssets: merged,
+    customAsset: hasOther ? answers.customAsset : "",
+  };
+}
+
 export function useOnboarding() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
@@ -30,7 +60,15 @@ export function useOnboarding() {
   function isCurrentStepValid(): boolean {
     if (currentQuestion.type === "multi") {
       const value = answers[currentQuestion.key as keyof QuizAnswers];
-      return Array.isArray(value) && value.length > 0;
+      if (!Array.isArray(value) || value.length === 0) return false;
+      if (currentQuestion.key === "favoriteAssets") {
+        const hasRealCoin = (value as string[]).some((v) => v !== "Other...");
+        const hasCustom =
+          (value as string[]).includes("Other...") &&
+          answers.customAsset.trim().length > 0;
+        return hasRealCoin || hasCustom;
+      }
+      return true;
     }
     const value = answers[currentQuestion.key as keyof QuizAnswers];
     return typeof value === "string" && value.length > 0;
@@ -75,7 +113,7 @@ export function useOnboarding() {
     setIsLoading(true);
     setApiError(null);
     try {
-      await submitOnboardingApi(answers);
+      await submitOnboardingApi(buildFinalAnswers(answers));
       setOnboardingComplete();
       navigate("/dashboard");
     } catch (err) {

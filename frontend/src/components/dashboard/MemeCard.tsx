@@ -32,7 +32,7 @@ export function MemeCard({
           </h2>
           {meme && (
             <p className="text-xs text-brand-muted mt-0.5">
-              {meme.source} · ▲ {meme.ups.toLocaleString()} upvotes
+              ▲ {meme.ups.toLocaleString()} upvotes
             </p>
           )}
         </div>
@@ -78,7 +78,7 @@ export function MemeCard({
             </p>
           )}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-brand-muted">
+            <span className="text-sm text-brand-muted">
               How does this make you feel?
             </span>
             <div className="flex gap-2 ml-auto">

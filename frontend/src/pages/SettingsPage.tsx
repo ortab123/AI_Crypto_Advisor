@@ -7,6 +7,23 @@ import { Input } from "../components/common/Input";
 import { FormError } from "../components/common/FormError";
 import apiClient from "../utils/api.utils";
 
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-brand-slate rounded-xl border border-brand-border p-6 space-y-4">
+      <h2 className="text-xs uppercase tracking-widest font-semibold text-brand-muted">
+        {title}
+      </h2>
+      {children}
+    </div>
+  );
+}
+
 export function SettingsPage() {
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
@@ -74,23 +91,6 @@ export function SettingsPage() {
     }
   }
 
-  function Section({
-    title,
-    children,
-  }: {
-    title: string;
-    children: React.ReactNode;
-  }) {
-    return (
-      <div className="bg-brand-slate rounded-xl border border-brand-border p-6 space-y-4">
-        <h2 className="text-xs uppercase tracking-widest font-semibold text-brand-muted">
-          {title}
-        </h2>
-        {children}
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-brand-slate-dark text-white">
       {/* Navbar */}
@@ -141,6 +141,8 @@ export function SettingsPage() {
           <Input
             label="Current Password"
             type="password"
+            autoComplete="current-password"
+            placeholder="Your current password"
             value={currentPassword}
             onChange={(e) => {
               setCurrentPassword(e.target.value);
@@ -150,6 +152,8 @@ export function SettingsPage() {
           <Input
             label="New Password"
             type="password"
+            autoComplete="new-password"
+            placeholder="At least 8 characters"
             value={newPassword}
             onChange={(e) => {
               setNewPassword(e.target.value);
@@ -159,6 +163,8 @@ export function SettingsPage() {
           <Input
             label="Confirm New Password"
             type="password"
+            autoComplete="new-password"
+            placeholder="Repeat new password"
             value={confirmPassword}
             onChange={(e) => {
               setConfirmPassword(e.target.value);

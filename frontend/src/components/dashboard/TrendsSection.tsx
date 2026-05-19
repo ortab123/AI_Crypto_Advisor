@@ -67,7 +67,7 @@ function FearGreedCard({
         <button
           onClick={() => setShowInfo((v) => !v)}
           title="How is this calculated?"
-          className="text-brand-muted hover:text-white transition-colors text-sm"
+          className="text-brand-muted hover:text-white transition-colors text-lg font-bold"
         >
           ⓘ
         </button>
@@ -174,7 +174,7 @@ function TrendingCoinChip({ coin }: { coin: TrendingCoin }) {
       </button>
 
       {expanded && (
-        <div className="mt-1 bg-brand-slate-deep/80 border border-brand-red/20 rounded-xl px-3 py-2.5 space-y-1.5 text-[11px]">
+        <div className="mt-1 bg-brand-slate-deep/80 border border-brand-red/20 rounded-xl px-3 py-3 space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-brand-muted">Market Cap Rank</span>
             <span className="text-white font-semibold">
@@ -230,7 +230,7 @@ function RedditPostRow({ post }: { post: RedditPost }) {
           {post.title}
         </p>
         <p className="text-xs text-brand-muted mt-1">
-          r/{post.subreddit} · 💬 {post.numComments} · {timeAgo(post.createdAt)}
+          💬 {post.numComments} · {timeAgo(post.createdAt)}
         </p>
       </div>
     </a>
@@ -273,9 +273,7 @@ export function TrendsSection({
                 No Reddit data available
               </p>
             )}
-            <p className="text-xs text-brand-muted mt-2">
-              r/CryptoCurrency · r/Bitcoin · top posts today
-            </p>
+            <p className="text-sm text-brand-muted mt-2">top posts today</p>
           </div>
 
           <div className="bg-brand-slate border border-brand-border rounded-xl p-5">
@@ -291,8 +289,8 @@ export function TrendsSection({
             ) : (
               <p className="text-brand-muted text-xs">No trending data</p>
             )}
-            <p className="text-xs text-brand-muted mt-3">
-              Source: CoinGecko · click any coin for details
+            <p className="text-sm text-brand-muted mt-3">
+              click any coin for details
             </p>
           </div>
 

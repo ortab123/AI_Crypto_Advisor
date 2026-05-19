@@ -38,7 +38,7 @@ export function MultiChoiceQuestion({
       {showCustomInput && (
         <div className="mt-1 ml-7">
           <Input
-            placeholder="Enter custom asset..."
+            placeholder="e.g. ADA, DOT,(max 3 coins, comma-separated)"
             value={customAsset}
             onChange={(e) => onCustomAsset(e.target.value)}
           />

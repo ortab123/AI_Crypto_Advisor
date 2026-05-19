@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { DashboardData } from "../types/dashboard.types";
 import { fetchDashboardApi } from "../services/dashboard.service";
@@ -8,7 +8,9 @@ export function useDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setIsLoading(true);
+    setError(null);
     fetchDashboardApi()
       .then(setData)
       .catch((err) => {
@@ -21,5 +23,9 @@ export function useDashboard() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  return { data, isLoading, error };
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return { data, isLoading, error, refetch: load };
 }

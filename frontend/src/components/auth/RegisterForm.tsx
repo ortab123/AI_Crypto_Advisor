@@ -41,7 +41,7 @@ export function RegisterForm() {
         label="Email"
         type="email"
         name="email"
-        placeholder="Crypto@movoe.com"
+        placeholder="Crypto@moveo.com"
         value={formData.email}
         onChange={handleChange}
         error={fieldErrors.email}
@@ -51,7 +51,7 @@ export function RegisterForm() {
         label="Password"
         type="password"
         name="password"
-        placeholder="••••••••"
+        placeholder="At least 8 characters"
         value={formData.password}
         onChange={handleChange}
         error={fieldErrors.password}
@@ -61,7 +61,7 @@ export function RegisterForm() {
         label="Confirm Password"
         type="password"
         name="confirmPassword"
-        placeholder="••••••••"
+        placeholder="Repeat your password"
         value={formData.confirmPassword}
         onChange={handleChange}
         error={fieldErrors.confirmPassword}

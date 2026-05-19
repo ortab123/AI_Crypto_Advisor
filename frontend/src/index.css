@@ -30,3 +30,19 @@
     transition: background-color 5000s ease-in-out 0s;
   }
 }
+
+/* Thin scrollbar for coin list */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #525e79 transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #525e79;
+  border-radius: 4px;
+}

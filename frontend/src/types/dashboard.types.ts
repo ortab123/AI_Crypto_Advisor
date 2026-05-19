@@ -6,6 +6,8 @@ export interface CoinPrice {
   change24h: number;
   /** Last ~24 hourly close prices for sparkline. May be empty. */
   sparkline: number[];
+  /** True when price endpoints were unavailable (e.g. rate-limited). Coin name/symbol still valid. */
+  priceUnavailable?: boolean;
 }
 
 export interface NewsItem {

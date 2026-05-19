@@ -6,6 +6,7 @@ import { formatPrice } from "./utils";
 export function CoinRow({ coin }: { coin: CoinPrice }) {
   const [expanded, setExpanded] = useState(false);
   const up = coin.change24h >= 0;
+  const unavailable = coin.priceUnavailable === true;
 
   const sparkHigh = coin.sparkline.length ? Math.max(...coin.sparkline) : null;
   const sparkLow = coin.sparkline.length ? Math.min(...coin.sparkline) : null;
@@ -29,12 +30,20 @@ export function CoinRow({ coin }: { coin: CoinPrice }) {
           <Sparkline data={coin.sparkline} up={up} />
         )}
         <div className="text-right shrink-0">
-          <p className="font-bold text-white">{formatPrice(coin.price)}</p>
-          <p
-            className={`text-xs font-semibold mt-0.5 ${up ? "text-emerald-400" : "text-red-400"}`}
-          >
-            {up ? "▲" : "▼"} {Math.abs(coin.change24h).toFixed(2)}%
-          </p>
+          {unavailable ? (
+            <p className="text-xs text-brand-muted italic">Price unavailable</p>
+          ) : (
+            <>
+              <p className="font-bold text-white">{formatPrice(coin.price)}</p>
+              <p
+                className={`text-xs font-semibold mt-0.5 ${
+                  up ? "text-emerald-400" : "text-red-400"
+                }`}
+              >
+                {up ? "▲" : "▼"} {Math.abs(coin.change24h).toFixed(2)}%
+              </p>
+            </>
+          )}
         </div>
         <span className="text-brand-muted text-xs shrink-0 ml-1">
           {expanded ? "▲" : "▼"}
@@ -42,8 +51,8 @@ export function CoinRow({ coin }: { coin: CoinPrice }) {
       </button>
 
       {expanded && (
-        <div className="mb-3 bg-brand-slate-deep/70 border border-brand-red/20 rounded-xl px-4 py-3 space-y-2 text-[11px]">
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+        <div className="mb-3 bg-brand-slate-deep/70 border border-brand-red/20 rounded-xl px-4 py-3 space-y-2">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-brand-muted">Price</span>
               <span className="text-white font-semibold">

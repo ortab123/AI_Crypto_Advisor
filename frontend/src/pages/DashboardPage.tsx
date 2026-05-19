@@ -13,7 +13,7 @@ import { TrendsSection } from "../components/dashboard/TrendsSection";
 
 export function DashboardPage() {
   const { user, logout } = useAuthContext();
-  const { data, isLoading, error } = useDashboard();
+  const { data, isLoading, error, refetch } = useDashboard();
   const navigate = useNavigate();
 
   const [localFeedback, setLocalFeedback] = useState<Record<string, string>>(
@@ -173,13 +173,37 @@ export function DashboardPage() {
                     ))}
                   </div>
                 ) : !data?.prices.length ? (
-                  <p className="text-brand-muted text-sm">
-                    No price data available.
-                  </p>
+                  <div className="flex flex-col items-center gap-3 py-4 text-center">
+                    {(data?.profile.favoriteAssets.length ?? 0) > 0 ? (
+                      <>
+                        <p className="text-brand-muted text-sm">
+                          Price data temporarily unavailable.
+                        </p>
+                        <button
+                          onClick={refetch}
+                          className="text-xs text-brand-red-light hover:text-white border border-brand-red/40 hover:border-brand-red px-3 py-1.5 rounded-lg transition-colors"
+                        >
+                          Retry
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-brand-muted text-sm">
+                          No coins selected yet.
+                        </p>
+                        <button
+                          onClick={() => navigate("/profile")}
+                          className="text-xs text-brand-red-light hover:text-white border border-brand-red/40 hover:border-brand-red px-3 py-1.5 rounded-lg transition-colors"
+                        >
+                          Edit preferences
+                        </button>
+                      </>
+                    )}
+                  </div>
                 ) : (
-                  <div>
+                  <div className="max-h-[340px] overflow-y-auto pr-1 scrollbar-thin">
                     {data.prices.map((coin) => (
-                      <CoinRow key={coin.symbol} coin={coin} />
+                      <CoinRow key={coin.id} coin={coin} />
                     ))}
                   </div>
                 )}
@@ -208,7 +232,7 @@ export function DashboardPage() {
         {showNews && (
           <div>
             <h2 className="text-xs uppercase tracking-widest font-semibold text-brand-muted mb-5">
-              Personalized Market News
+              Market News
               <span className="ml-2 text-brand-muted/50 normal-case tracking-normal font-normal">
                 · ★ star articles to receive similar news
               </span>

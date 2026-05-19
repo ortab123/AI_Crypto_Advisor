@@ -19,6 +19,34 @@ const EMPTY: QuizAnswers = {
   preferredContent: [],
 };
 
+function buildFinalAnswers(answers: QuizAnswers): QuizAnswers {
+  const hasOther = answers.favoriteAssets.includes("Other...");
+  const customCoins = hasOther
+    ? answers.customAsset
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+    : [];
+  const seen = new Set<string>();
+  const merged: string[] = [];
+  for (const coin of [
+    ...answers.favoriteAssets.filter((a) => a !== "Other..."),
+    ...customCoins,
+  ]) {
+    const key = coin.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      merged.push(coin);
+    }
+  }
+  return {
+    ...answers,
+    favoriteAssets: merged,
+    customAsset: hasOther ? answers.customAsset : "",
+  };
+}
+
 export function useProfile() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>(EMPTY);
@@ -34,9 +62,26 @@ export function useProfile() {
     getOnboardingApi()
       .then((prefs) => {
         if (prefs) {
+          // Standard labels shown as checkboxes (everything except "Other...")
+          const standardOptions = new Set(
+            QUIZ_QUESTIONS[0].options.filter((o) => o !== "Other..."),
+          );
+          const standardSelected = prefs.favoriteAssets.filter((a) =>
+            standardOptions.has(a),
+          );
+          // Coins that don't match any checkbox came from the "Other..." field.
+          // Always reconstruct from favoriteAssets so stale customAsset in DB doesn't pollute the form.
+          const nonStandard = prefs.favoriteAssets.filter(
+            (a) => !standardOptions.has(a) && a !== "Other...",
+          );
+          const customAsset = nonStandard.join(", ");
+          // Re-add "Other..." to the selection so the text field is visible
+          const favoriteAssets = customAsset
+            ? [...standardSelected, "Other..."]
+            : standardSelected;
           setAnswers({
-            favoriteAssets: prefs.favoriteAssets,
-            customAsset: prefs.customAsset ?? "",
+            favoriteAssets,
+            customAsset,
             investorType: prefs.investorType,
             experienceLevel: prefs.experienceLevel,
             riskTolerance: prefs.riskTolerance,
@@ -54,7 +99,15 @@ export function useProfile() {
   function isCurrentStepValid(): boolean {
     if (currentQuestion.type === "multi") {
       const value = answers[currentQuestion.key as keyof QuizAnswers];
-      return Array.isArray(value) && value.length > 0;
+      if (!Array.isArray(value) || value.length === 0) return false;
+      if (currentQuestion.key === "favoriteAssets") {
+        const hasRealCoin = (value as string[]).some((v) => v !== "Other...");
+        const hasCustom =
+          (value as string[]).includes("Other...") &&
+          answers.customAsset.trim().length > 0;
+        return hasRealCoin || hasCustom;
+      }
+      return true;
     }
     const value = answers[currentQuestion.key as keyof QuizAnswers];
     return typeof value === "string" && value.length > 0;
@@ -99,7 +152,7 @@ export function useProfile() {
     setIsSubmitting(true);
     setApiError(null);
     try {
-      await submitOnboardingApi(answers);
+      await submitOnboardingApi(buildFinalAnswers(answers));
       setOnboardingComplete();
       setSaved(true);
       setTimeout(() => navigate("/dashboard"), 1200);

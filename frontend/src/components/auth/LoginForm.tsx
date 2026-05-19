@@ -29,7 +29,7 @@ export function LoginForm() {
         label="Email"
         type="email"
         name="email"
-        placeholder="you@example.com"
+        placeholder="name@example.com"
         value={formData.email}
         onChange={handleChange}
         error={fieldErrors.email}
@@ -39,7 +39,7 @@ export function LoginForm() {
         label="Password"
         type="password"
         name="password"
-        placeholder="••••••••"
+        placeholder="Enter your password"
         value={formData.password}
         onChange={handleChange}
         error={fieldErrors.password}
