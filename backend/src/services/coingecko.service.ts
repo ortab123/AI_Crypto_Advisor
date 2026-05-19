@@ -116,6 +116,7 @@ export async function getCoinPrices(assets: string[]): Promise<CoinPrice[]> {
         price_change_percentage: "24h",
         sparkline: true,
       },
+      headers: env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY } : {},
       timeout: 10000,
     });
 
@@ -144,6 +145,7 @@ export async function getCoinPrices(assets: string[]): Promise<CoinPrice[]> {
     try {
       const { data } = await axios.get(`${BASE}/simple/price`, {
         params: { ids, vs_currencies: "usd", include_24hr_change: true },
+        headers: env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": env.COINGECKO_API_KEY } : {},
         timeout: 8000,
       });
       const result = coins.map((coin) => ({
