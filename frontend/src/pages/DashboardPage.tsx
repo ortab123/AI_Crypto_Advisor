@@ -2,7 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { useDashboard } from "../hooks/useDashboard";
-import { submitFeedbackApi } from "../services/dashboard.service";
+import {
+  submitFeedbackApi,
+  submitNewsVoteApi,
+  submitCoinVoteApi,
+  submitInsightVoteApi,
+  submitMemeVoteApi,
+  submitRedditVoteApi,
+} from "../services/dashboard.service";
 import { Skeleton, Badge } from "../components/dashboard/Skeleton";
 import { CoinRow } from "../components/dashboard/CoinRow";
 import { NewsCard } from "../components/dashboard/NewsCard";
@@ -50,6 +57,13 @@ export function DashboardPage() {
     },
     [localFeedback],
   );
+
+  const volatilityLevel = (change24h: number) => {
+    const abs = Math.abs(change24h);
+    if (abs < 2) return "low";
+    if (abs < 5) return "medium";
+    return "high";
+  };
 
   const prefs = data?.profile.preferredContent ?? [];
   const noFilter = prefs.length === 0;
@@ -158,7 +172,15 @@ export function DashboardPage() {
                         key={coin.id}
                         coin={coin}
                         feedback={getFb("coin", coin.id)}
-                        onFeedback={(v) => handleFeedback("coin", coin.id, v)}
+                        onFeedback={(v) => {
+                          handleFeedback("coin", coin.id, v);
+                          submitCoinVoteApi({
+                            coinSymbol: coin.symbol,
+                            voteType: v,
+                            priceTrend: coin.change24h >= 0 ? "up" : "down",
+                            volatilityLevel: volatilityLevel(coin.change24h),
+                          }).catch(() => {});
+                        }}
                       />
                     ))}
                   </div>
@@ -175,10 +197,16 @@ export function DashboardPage() {
                 feedback={
                   data?.insightId ? getFb("insight", data.insightId) : undefined
                 }
-                onFeedback={(v) =>
-                  data?.insightId &&
-                  handleFeedback("insight", data.insightId, v)
-                }
+                onFeedback={(v) => {
+                  if (!data?.insightId) return;
+                  handleFeedback("insight", data.insightId, v);
+                  submitInsightVoteApi({
+                    insightId: data.insightId,
+                    voteType: v,
+                    cryptoAssets: data.profile.favoriteAssets,
+                    riskLevel: data.profile.riskTolerance,
+                  }).catch(() => {});
+                }}
               />
             )}
           </div>
@@ -210,9 +238,16 @@ export function DashboardPage() {
                     key={item.id}
                     item={item}
                     starred={getFb("news", String(item.id)) === "star"}
-                    onStar={() =>
-                      handleFeedback("news", String(item.id), "star")
-                    }
+                    onStar={() => {
+                      handleFeedback("news", String(item.id), "star");
+                      const isCurrentlyStarred = getFb("news", String(item.id)) === "star";
+                      submitNewsVoteApi({
+                        voteType: isCurrentlyStarred ? "unstarred" : "starred",
+                        cryptoAssets: data.profile.favoriteAssets,
+                        articleUrl: item.url,
+                        source: item.source,
+                      }).catch(() => {});
+                    }}
                   />
                 ))}
               </div>
@@ -226,9 +261,15 @@ export function DashboardPage() {
             meme={data?.meme}
             isLoading={isLoading}
             feedback={data?.meme ? getFb("meme", data.meme.id) : undefined}
-            onFeedback={(v) =>
-              data?.meme && handleFeedback("meme", data.meme.id, v)
-            }
+            onFeedback={(v) => {
+              if (!data?.meme) return;
+              handleFeedback("meme", data.meme.id, v);
+              submitMemeVoteApi({
+                memeId: data.meme.id,
+                reactionType: v,
+                cryptoAssets: data.profile.favoriteAssets,
+              }).catch(() => {});
+            }}
           />
         )}
 
@@ -238,7 +279,18 @@ export function DashboardPage() {
             trends={data?.trends}
             isLoading={isLoading}
             getFeedback={getFb}
-            onFeedback={handleFeedback}
+            onFeedback={(type, id, value) => {
+              handleFeedback(type, id, value);
+              if (type === "reddit") {
+                const post = data?.trends?.reddit.find((p) => p.id === id);
+                submitRedditVoteApi({
+                  postId: id,
+                  voteType: value,
+                  cryptoAssets: data?.profile.favoriteAssets ?? [],
+                  postTopic: post?.subreddit,
+                }).catch(() => {});
+              }
+            }}
           />
         )}
       </main>

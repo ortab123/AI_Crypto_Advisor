@@ -51,3 +51,65 @@ model Feedback {
   @@unique([userId, contentType, contentId])
   @@map("feedback")
 }
+
+model NewsVote {
+  id           String   @id @default(cuid())
+  userId       String
+  voteType     String
+  cryptoAssets String[]
+  articleUrl   String
+  source       String
+  author       String?
+  articleColors String[]
+  createdAt    DateTime @default(now())
+
+  @@map("news_votes")
+}
+
+model CoinVote {
+  id              String   @id @default(cuid())
+  userId          String
+  coinSymbol      String
+  voteType        String
+  priceTrend      String
+  volatilityLevel String
+  createdAt       DateTime @default(now())
+
+  @@map("coin_votes")
+}
+
+model InsightVote {
+  id           String   @id @default(cuid())
+  userId       String
+  insightId    String
+  voteType     String
+  cryptoAssets String[]
+  riskLevel    String
+  createdAt    DateTime @default(now())
+
+  @@map("insight_votes")
+}
+
+model MemeVote {
+  id           String   @id @default(cuid())
+  userId       String
+  memeId       String
+  reactionType String
+  cryptoAssets String[]
+  memeStyle    String?
+  createdAt    DateTime @default(now())
+
+  @@map("meme_votes")
+}
+
+model RedditVote {
+  id           String   @id @default(cuid())
+  userId       String
+  postId       String
+  voteType     String
+  cryptoAssets String[]
+  postTopic    String?
+  createdAt    DateTime @default(now())
+
+  @@map("reddit_votes")
+}
