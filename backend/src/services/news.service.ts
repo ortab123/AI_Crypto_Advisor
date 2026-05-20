@@ -50,20 +50,19 @@ function extractAttr(xml: string, tag: string, attr: string): string {
 }
 
 function extractImage(item: string): string | null {
-  // 1. <media:content url="...">
   let img = extractAttr(item, "media:content", "url");
   if (img) return img;
-  // 2. <enclosure url="..." type="image/...">
+
   const enc = item.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i);
   if (enc) return enc[1];
+
   const enc2 = item.match(
     /<enclosure[^>]+url="([^"]+)"[^>]+type="image[^"]*"/i,
   );
   if (enc2) return enc2[1];
-  // 3. <media:thumbnail url="...">
   img = extractAttr(item, "media:thumbnail", "url");
   if (img) return img;
-  // 4. First <img src="..."> in description
+
   const descBlock =
     item.match(/<description>([\s\S]*?)<\/description>/i)?.[1] ?? "";
   const imgMatch = descBlock.match(/<img[^>]+src=["']([^"']+)["']/i);
@@ -72,13 +71,12 @@ function extractImage(item: string): string | null {
 }
 
 function extractLink(item: string): string {
-  // Prefer <link> CDATA
   const cdataLink = item.match(/<link><!\[CDATA\[([\s\S]*?)]]><\/link>/i);
-  if (cdataLink) return cdataLink[1].split("?")[0].trim(); // strip UTM
-  // Plain <link>
+  if (cdataLink) return cdataLink[1].split("?")[0].trim();
+
   const plain = item.match(/<link>(https?[^<]+)<\/link>/i);
   if (plain) return plain[1].trim();
-  // <guid isPermaLink="true">
+
   const guid = item.match(
     /<guid[^>]*isPermaLink="true"[^>]*>(https?[^<]+)<\/guid>/i,
   );

@@ -6,7 +6,7 @@ import axios from "axios";
 export interface MemeItem {
   id: string;
   title: string;
-  imageUrl: string | null; // null means use text-only display
+  imageUrl: string | null;
   postUrl: string;
   source: string;
   ups: number;
@@ -66,21 +66,18 @@ const SUBREDDITS = ["cryptocurrencymemes", "Bitcoin", "CryptoCurrency"];
 export async function getMeme(): Promise<MemeItem> {
   try {
     const sub = SUBREDDITS[Math.floor(Math.random() * SUBREDDITS.length)];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await axios.get<{ count: number; memes: any[] }>(
       `https://meme-api.com/gimme/${sub}/5`,
       { timeout: 6000 },
     );
 
     const valid = (data.memes || []).filter(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (m: any) => !m.nsfw && !m.spoiler && IMAGE_EXT.test(m.url),
     );
 
     if (valid.length === 0) throw new Error("No valid image memes");
 
     // Pick the one with most upvotes
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const best = valid.sort((a: any, b: any) => b.ups - a.ups)[0];
 
     return {

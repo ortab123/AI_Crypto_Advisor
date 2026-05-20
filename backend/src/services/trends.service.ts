@@ -1,7 +1,6 @@
 // Social Trends & Sentiment data:
 //   - CoinGecko /search/trending  → trending coins (free, no key)
 //   - Reddit public JSON API       → top posts from r/CryptoCurrency & r/Bitcoin (no auth)
-//   - alternative.me Fear & Greed  → crypto sentiment index (free, no key)
 
 import axios from "axios";
 
@@ -25,7 +24,7 @@ export interface RedditPost {
 }
 
 export interface FearGreed {
-  value: number; // 0–100
+  value: number;
   classification: string; // "Extreme Fear" | "Fear" | "Neutral" | "Greed" | "Extreme Greed"
 }
 
@@ -41,7 +40,6 @@ async function fetchTrending(): Promise<TrendingCoin[]> {
       "https://api.coingecko.com/api/v3/search/trending",
       { timeout: 7000 },
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data.coins || []).slice(0, 8).map((c: any) => ({
       id: c.item.id,
       name: c.item.name,

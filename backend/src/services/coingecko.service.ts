@@ -4,9 +4,7 @@ import { env } from "../config/env.config";
 
 const BASE = env.COINGECKO_BASE_URL;
 
-// ---------------------------------------------------------------------------
 // In-memory caches to avoid hammering CoinGecko's free-tier rate limits.
-// ---------------------------------------------------------------------------
 
 /** Cache for resolved coin metadata from /search (coin IDs never change). */
 const searchCache = new Map<
@@ -60,7 +58,6 @@ async function searchCoin(
   if (cached) return cached;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await axios.get<any>(`${BASE}/search`, {
       params: { query },
       headers: env.COINGECKO_API_KEY
@@ -71,8 +68,6 @@ async function searchCoin(
     const coins: any[] = data?.coins ?? [];
     if (coins.length === 0) return null;
 
-    // Prefer an exact symbol match (case-insensitive) over the first result.
-    // This avoids picking the wrong token when multiple coins share a ticker (e.g. MORPHO, KCS).
     const upperQuery = query.toUpperCase();
     const hit =
       coins.find(

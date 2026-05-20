@@ -1,4 +1,3 @@
-/** Maps human-readable asset labels (quiz checkboxes + user-typed tickers) to CoinGecko metadata. */
 export const ASSET_MAP: Record<
   string,
   { id: string; symbol: string; name: string }
